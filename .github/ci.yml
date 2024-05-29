@@ -1,4 +1,4 @@
-name: CI
+name: Golang 1.20 CI
 
 on:
   pull_request:

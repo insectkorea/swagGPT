@@ -18,5 +18,4 @@ require (
 	github.com/schollz/progressbar/v3 v3.14.3
 	github.com/sirupsen/logrus v1.9.3
 	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
-	gopkg.in/yaml.v2 v2.4.0
 )

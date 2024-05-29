@@ -6,6 +6,8 @@ import (
 	"go/token"
 	"os"
 	"path/filepath"
+
+	"github.com/sirupsen/logrus"
 )
 
 // ScanDir scans the given directory for Go files and returns a list of file paths.
@@ -24,22 +26,23 @@ func ScanDir(dir string) ([]string, error) {
 }
 
 // ParseFile parses the Go file and returns a list of handler functions.
-func ParseFile(filename string) ([]*ast.FuncDecl, error) {
+func ParseFile(filename string) ([]*ast.FuncDecl, *token.FileSet, error) {
 	fset := token.NewFileSet()
 	node, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var handlers []*ast.FuncDecl
 	for _, f := range node.Decls {
 		if fn, isFn := f.(*ast.FuncDecl); isFn {
-			if isGinContext(fn) || isEchoContext(fn) {
+			if fn.Name.IsExported() && (isGinContext(fn) || isEchoContext(fn)) {
+				logrus.Infof("Found handler: %s from %s", fn.Name.Name, filename)
 				handlers = append(handlers, fn)
 			}
 		}
 	}
-	return handlers, nil
+	return handlers, fset, nil
 }
 
 func isGinContext(fn *ast.FuncDecl) bool {

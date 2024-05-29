@@ -20,7 +20,7 @@ func TestScanDir(t *testing.T) {
 }
 
 func TestParseFile(t *testing.T) {
-	handlers, err := ParseFile("testdata/example.go")
+	handlers, _, err := ParseFile("testdata/example.go")
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}

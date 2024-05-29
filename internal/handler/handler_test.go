@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -45,13 +44,13 @@ func Helloworld(g *gin.Context) {
 
 	mockClient := &test.MockOpenAIClient{}
 
-	err = ProcessFiles(files, mockClient, false, "configs/config.yaml")
+	err = ProcessFiles(files, mockClient, false, "test-model")
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
 	// Check the contents of the modified file
-	modifiedContent, err := ioutil.ReadFile(goFilePath)
+	modifiedContent, err := os.ReadFile(goFilePath)
 	if err != nil {
 		t.Fatalf("Failed to read modified Go file: %v", err)
 	}
