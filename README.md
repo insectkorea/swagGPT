@@ -14,7 +14,7 @@
 To install the CLI tool, use the following command:
 
 ```sh
-go get github.com/insectkorea/swagGPT
+go install github.com/insectkorea/swagGPT/cmd/swaggpt@latest
 ```
 
 ## Usage
