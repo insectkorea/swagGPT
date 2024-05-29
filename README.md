@@ -4,10 +4,11 @@
 
 ## Features
 
-- **Automatic Swagger Comment Generation**: Uses OpenAI API to generate Swagger comments based on handler function content.
-- **Supports Gin and Echo Frameworks**: Initially focused on Gin but extendable to other web frameworks like Echo.
-- **Dry Run Mode**: Preview the generated comments without modifying the actual files.
-- **Cost Estimation**: It suggests approximate costs before execution.
+- **Automated Swagger Comment Creation**: Leverages OpenAI API to automatically produce Swagger comments from the content of handler functions.
+- **Compatibility with Gin and Echo Frameworks**: Primarily designed for Gin, but can be extended to support other web frameworks such as Echo.
+- **Dry Run Feature**: Allows users to preview the generated comments without altering the actual files.
+- **Cost Prediction**: Provides an estimated cost prior to execution.
+- **Concurrent Execution**: Enables simultaneous processing of multiple handler functions, improving the efficiency and speed of the documentation generation process.
 
 ## Installation
 
