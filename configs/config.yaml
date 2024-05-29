@@ -1,0 +1,8 @@
+swagger:
+  summary_template: "Summary for {function_name}"
+  description_template: "Description for {function_name}"
+  tags: ["example"]
+  accept: "json"
+  produce: "json"
+  success_response: '200 {string} string "OK"'
+  router_template: "/example/{function_name} [get]"
