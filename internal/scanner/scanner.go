@@ -37,11 +37,11 @@ func ParseFile(filename string) ([]*ast.FuncDecl, *token.FileSet, error) {
 	for _, f := range node.Decls {
 		if fn, isFn := f.(*ast.FuncDecl); isFn {
 			if fn.Name.IsExported() && (isGinContext(fn) || isEchoContext(fn)) {
-				logrus.Infof("Found handler: %s from %s", fn.Name.Name, filename)
 				handlers = append(handlers, fn)
 			}
 		}
 	}
+	logrus.Infof("Found %d handlers in %s", len(handlers), filename)
 	return handlers, fset, nil
 }
 
