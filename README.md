@@ -33,7 +33,7 @@ export OPENAI_API_KEY=your_openai_api_key
 To add Swagger comments to handler functions in a specified directory:
 
 ```sh
-swagGPT add-comments --dir /path/to/your/code --model gpt-4o 
+swaggpt add-comments --dir /path/to/your/code --model gpt-4o 
 ```
 
 Please make sure your files are under source version control, as swagGTP will overwrite contents.
@@ -41,7 +41,7 @@ Please make sure your files are under source version control, as swagGTP will ov
 You can use the `--dry-run` flag to preview the changes without writing them to files:
 
 ```sh
-swagGPT add-comments --dir /path/to/your/code --model gpt-4o --dry-run
+swaggpt add-comments --dir /path/to/your/code --model gpt-4o --dry-run
 ```
 
 Note that while dry-run does not write to your files, but it does make API requests to Open AI.
