@@ -26,6 +26,7 @@ func ProcessFiles(files []string, client api.Client, dryRun bool, model string) 
 		wg.Add(1)
 		go func(filename string) {
 			defer wg.Done()
+			// nolint:errcheck
 			defer bar.Add(1)
 			if err := processFile(filename, client, dryRun, model); err != nil {
 				logrus.Errorf("Error processing file %s: %v", filename, err)
