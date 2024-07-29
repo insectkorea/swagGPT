@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/stretchr/testify v1.7.0
-	github.com/urfave/cli/v2 v2.27.2
+	github.com/urfave/cli/v2 v2.27.3
 )
 
 require (
@@ -23,5 +23,5 @@ require (
 	github.com/sashabaranov/go-openai v1.26.2
 	github.com/schollz/progressbar/v3 v3.14.4
 	github.com/sirupsen/logrus v1.9.3
-	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
+	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 )
