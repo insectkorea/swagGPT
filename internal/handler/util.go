@@ -27,7 +27,7 @@ func EstimateTotalTokens(files []string, ctxFile string) int {
 				continue
 			}
 			handlerContent := buf.String()
-			totalTokens += api.EstimateTokens(handlerContent)
+			totalTokens += api.EstimateTokens(handlerContent, "")
 		}
 	}
 	ctxFileContent, err := os.ReadFile(ctxFile)
@@ -35,6 +35,6 @@ func EstimateTotalTokens(files []string, ctxFile string) int {
 		logrus.Errorf("Error reading file %s: %v", ctxFile, err)
 		return 0
 	}
-	totalTokens += api.EstimateTokens(string(ctxFileContent))
+	totalTokens += api.EstimateTokens(string(ctxFileContent), "")
 	return totalTokens
 }

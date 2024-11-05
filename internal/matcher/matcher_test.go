@@ -1,47 +1,48 @@
 package matcher
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/insectkorea/swagGPT/internal/model"
 )
 
 func TestMatchHandlerToRoute(t *testing.T) {
 	testCases := []struct {
 		name             string
 		handlerSignature string
-		routes           []string
+		routes           []model.Route
 		expectedRoute    string
 		expectedError    error
 	}{
 		{
 			name:             "MatchingRoute",
 			handlerSignature: "RBFBundleHandler_ListByOrg",
-			routes: []string{
-				"GET /api/v1/organizations/:organization_id/bundles",
-				"GET /api/v1/organizations/:organization_id/invitations",
+			routes: []model.Route{
+				{Method: "GET", Path: "/api/v1/organizations/:organization_id/bundles", Pattern: "/api/v1/organizations/:organization_id/bundles"},
+				{Method: "GET", Path: "/api/v1/organizations/:organization_id/invitations", Pattern: "/api/v1/organizations/:organization_id/invitations"},
 			},
-			expectedRoute: "GET /api/v1/organizations/:organization_id/bundles",
+			expectedRoute: "/api/v1/organizations/:organization_id/bundles [get]",
 			expectedError: nil,
 		},
 		{
 			name:             "NonMatchingRoute",
 			handlerSignature: "Random_DoSomething",
-			routes: []string{
-				"GET /api/v1/organizations/:organization_id/bundles",
-				"GET /api/v1/organizations/:organization_id/invitations",
+			routes: []model.Route{
+				{Method: "GET", Path: "/api/v1/organizations/:organization_id/bundles", Pattern: "/api/v1/organizations/:organization_id/bundles"},
+				{Method: "GET", Path: "/api/v1/organizations/:organization_id/invitations", Pattern: "/api/v1/organizations/:organization_id/invitations"},
 			},
 			expectedRoute: "",
-			expectedError: &RouteNotFoundError{HandlerSignature: "Random_DoSomething"},
+			expectedError: nil,
 		},
 		{
 			name:             "MultipleMatchingRoutes",
 			handlerSignature: "OrgHandler_List",
-			routes: []string{
-				"GET /api/v1/organizations/:organization_id/bundles",
-				"GET /api/v1/organizations/:organization_id/invitations",
+			routes: []model.Route{
+				{Method: "GET", Path: "/api/v1/organizations/:organization_id/bundles", Pattern: "/api/v1/organizations/:organization_id/bundles"},
+				{Method: "GET", Path: "/api/v1/organizations/:organization_id/invitations", Pattern: "/api/v1/organizations/:organization_id/invitations"},
 			},
-			expectedRoute: "GET /api/v1/organizations/:organization_id/bundles",
+			expectedRoute: "/api/v1/organizations/:organization_id/bundles [get]",
 			expectedError: nil,
 		},
 	}
@@ -59,12 +60,4 @@ func TestMatchHandlerToRoute(t *testing.T) {
 			}
 		})
 	}
-}
-
-type RouteNotFoundError struct {
-	HandlerSignature string
-}
-
-func (e *RouteNotFoundError) Error() string {
-	return fmt.Sprintf("no route found for handler: %s", e.HandlerSignature)
 }

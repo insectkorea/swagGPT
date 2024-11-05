@@ -11,6 +11,7 @@ You are a helpful assistant for generating Swagger annotation comments for Go ha
 
 const userPromptTemplate = `
 Here is an example of a Go handler function:
+Make sure to follow the format strictly. Use struct that are defined in the codebase.
 // ListAccounts lists all existing accounts
 //
 //  @Summary      List accounts
@@ -24,16 +25,21 @@ Here is an example of a Go handler function:
 //  @Failure      404  {object}  httputil.HTTPError
 //  @Failure      500  {object}  httputil.HTTPError
 //  @Router       /accounts [get]
+
 Generate Swagger comments for the following function:
 %s
 Do not add any explanation and just return the Swagger comments. Do not wrap it in Markdown. Do not return the function itself.
 If it is not a handler function(e.g. a function in a test file or a helper function), return nothing.
+
+Here are candidate routes. Parse route according to the format:
+%s
 `
 
 // EstimateTokens estimates the number of tokens for generating Swagger comments.
-func EstimateTokens(functionContent string) int {
+func EstimateTokens(functionContent string, routes string) int {
 	userPrompt := fmt.Sprintf(userPromptTemplate,
 		functionContent,
+		routes,
 	)
 	prompt := userPrompt + systemPrompt
 

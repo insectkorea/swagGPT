@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/insectkorea/swagGPT/internal/model"
 	"github.com/insectkorea/swagGPT/internal/test"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +30,7 @@ func TestHandler(c *gin.Context) {
 	assert.NoError(t, err)
 
 	client := &test.MockOpenAIClient{}
-	err = processFile(filePath, client, true, "test-model")
+	err = processFile(filePath, client, true, "test-model", "")
 	assert.NoError(t, err)
 }
 
@@ -64,7 +65,13 @@ func TestHandler(c *gin.Context) {
 `)
 
 	client := &test.MockOpenAIClient{}
-	results, err := processHandlers(handlers, client, "test-model", token.NewFileSet())
+	results, err := processHandlers(handlers, client, "test-model", token.NewFileSet(), []model.Route{
+		{
+			Path:    "/example/TestHandler",
+			Method:  "GET",
+			Pattern: "/example/TestHandler",
+		},
+	})
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(results))
 	assert.Equal(t, "// TestHandler godoc\n// @Summary TestHandler summary\n// @Description do TestHandler\n// @Success 200 {string} string \"OK\"\n// @Router /example/TestHandler [get]\n", results[0].Comment)

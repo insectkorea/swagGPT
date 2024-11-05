@@ -17,7 +17,7 @@ type FileHandlerPair struct {
 }
 
 // ProcessFiles processes the given files to add Swagger comments to handler functions.
-func ProcessFiles(files []string, client api.Client, dryRun bool, model string) error {
+func ProcessFiles(files []string, client api.Client, dryRun bool, model string, contextFilePath string) error {
 	bar := progressbar.Default(int64(len(files)))
 
 	var wg sync.WaitGroup
@@ -28,7 +28,7 @@ func ProcessFiles(files []string, client api.Client, dryRun bool, model string) 
 			defer wg.Done()
 			// nolint:errcheck
 			defer bar.Add(1)
-			if err := processFile(filename, client, dryRun, model); err != nil {
+			if err := processFile(filename, client, dryRun, model, contextFilePath); err != nil {
 				logrus.Errorf("Error processing file %s: %v", filename, err)
 			}
 		}(file)
