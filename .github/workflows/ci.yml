@@ -36,6 +36,8 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.58
+      - name: Generate test coverage
+        run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
       - name: Test coverage
         uses: vladopajic/go-test-coverage@v2.10.2
         with:
