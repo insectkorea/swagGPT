@@ -29,7 +29,6 @@ func processHandler(handler *ast.FuncDecl, client api.Client, model string, rout
 	if err != nil {
 		return "", fmt.Errorf("failed to generate comment for %s: %v", handler.Name.Name, err)
 	}
-	fmt.Println(fmt.Sprintf("comment: %s", comment))
 
 	return comment, nil
 }

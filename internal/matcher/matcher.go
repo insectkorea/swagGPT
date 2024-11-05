@@ -20,7 +20,6 @@ func MatchHandlerToRoute(handlerSignature string, routes []model.Route) (string,
 	var matchingRoutes []matchedRoute
 	for _, route := range routes {
 		substrings, totalLength := findMatchedSubstrings(handlerSignature, route)
-		fmt.Println("Substrings matched:", substrings)
 		if len(substrings) > 0 {
 			matchingRoutes = append(matchingRoutes, matchedRoute{
 				Route:       route.Path,

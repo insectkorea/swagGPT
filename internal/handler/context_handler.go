@@ -43,11 +43,6 @@ func (ch *ContextFileHandler) ExtractRoutes(contextFilePath string) ([]model.Rou
 	// Traverse the AST with the extractor
 	ast.Walk(extractor, node)
 
-	// Output the extracted routes
-	for _, route := range extractor.Routes {
-		println("Method:", route.Method, "Path:", route.Path, "Pattern:", route.Pattern)
-	}
-
 	return extractor.Routes, nil
 }
 
