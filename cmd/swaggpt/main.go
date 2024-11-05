@@ -32,6 +32,7 @@ func main() {
 				Action: func(c *cli.Context) error {
 					dryRun := c.Bool("dry-run")
 					model := c.String("model")
+					ctx := c.String("context")
 					skipPrompt := c.Bool("yes")
 
 					dir := c.String("dir")
@@ -51,8 +52,13 @@ func main() {
 						return cli.Exit(err.Error(), 1)
 					}
 
+					_, err = os.Stat(ctx)
+					if err != nil {
+						return cli.Exit(err.Error(), 1)
+					}
+
 					// Estimate total tokens and cost
-					totalTokens := handler.EstimateTotalTokens(files)
+					totalTokens := handler.EstimateTotalTokens(files, ctx)
 
 					logrus.Infof(
 						`
@@ -101,6 +107,10 @@ Please check OpenAI's pricing for other models.`, totalTokens, float64(totalToke
 					&cli.BoolFlag{
 						Name:  "yes",
 						Usage: "Skip confirmation prompt",
+					},
+					&cli.BoolFlag{
+						Name:  "context",
+						Usage: "Additional context such as routes",
 					},
 				},
 			},
