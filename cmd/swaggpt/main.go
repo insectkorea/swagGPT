@@ -32,6 +32,7 @@ func main() {
 				Action: func(c *cli.Context) error {
 					dryRun := c.Bool("dry-run")
 					model := c.String("model")
+					contextFilePath := c.String("context")
 					skipPrompt := c.Bool("yes")
 
 					dir := c.String("dir")
@@ -51,8 +52,13 @@ func main() {
 						return cli.Exit(err.Error(), 1)
 					}
 
+					_, err = os.Stat(contextFilePath)
+					if err != nil {
+						return cli.Exit(err.Error(), 1)
+					}
+
 					// Estimate total tokens and cost
-					totalTokens := handler.EstimateTotalTokens(files)
+					totalTokens := handler.EstimateTotalTokens(files, contextFilePath)
 
 					logrus.Infof(
 						`
@@ -76,7 +82,7 @@ Please check OpenAI's pricing for other models.`, totalTokens, float64(totalToke
 						}
 					}
 
-					err = handler.ProcessFiles(files, client, dryRun, model)
+					err = handler.ProcessFiles(files, client, dryRun, model, contextFilePath)
 					if err != nil {
 						return cli.Exit(err.Error(), 1)
 					}
@@ -101,6 +107,10 @@ Please check OpenAI's pricing for other models.`, totalTokens, float64(totalToke
 					&cli.BoolFlag{
 						Name:  "yes",
 						Usage: "Skip confirmation prompt",
+					},
+					&cli.StringFlag{
+						Name:  "route-file",
+						Usage: "Additional context file for routes",
 					},
 				},
 			},

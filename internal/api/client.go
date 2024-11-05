@@ -9,7 +9,7 @@ import (
 
 // Client is an interface representing the OpenAI client.
 type Client interface {
-	GenerateSwaggerComment(functionName, functionContent, model string) (string, error)
+	GenerateSwaggerComment(functionName, functionContent, model string, routeString string) (string, error)
 }
 
 // OpenAIClient is a struct that implements the Client interface.
@@ -25,16 +25,17 @@ func NewOpenAIClient(apiKey string) *OpenAIClient {
 }
 
 // GenerateSwaggerComment generates Swagger comments using OpenAI API.
-func (c *OpenAIClient) GenerateSwaggerComment(functionName, functionContent, model string) (string, error) {
+func (c *OpenAIClient) GenerateSwaggerComment(functionName, functionContent, model string, routeString string) (string, error) {
 	messages := []openai.ChatCompletionMessage{
 		{
 			Role:    "system",
-			Content: "You are a helpful assistant for generating Swagger annotation comments for Go handler functions.",
+			Content: systemPrompt,
 		},
 		{
 			Role: "user",
 			Content: fmt.Sprintf(userPromptTemplate,
 				functionContent,
+				routeString,
 			),
 		},
 	}

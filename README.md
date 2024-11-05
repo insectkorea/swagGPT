@@ -36,6 +36,12 @@ To add Swagger comments to handler functions in a specified directory:
 swaggpt add-comments --dir /path/to/your/code --model gpt-4o 
 ```
 
+If you have separate file that defines routes, you can add 
+
+```sh
+swaggpt add-comments --dir /path/to/your/code --model gpt-4o --route-file /path/to/your/route-file
+```
+
 Please make sure your files are under source version control, as swagGTP will overwrite contents.
 
 You can use the `--dry-run` flag to preview the changes without writing them to files:

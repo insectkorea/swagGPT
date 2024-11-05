@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/insectkorea/swagGPT/internal/api"
+	"github.com/insectkorea/swagGPT/internal/model"
 	"github.com/insectkorea/swagGPT/internal/scanner"
 
 	"github.com/sirupsen/logrus"
@@ -25,13 +26,19 @@ type HandlerResult struct {
 }
 
 // processFile processes a single file to add Swagger comments to its handler functions.
-func processFile(filePath string, client api.Client, dryRun bool, model string) error {
+func processFile(filePath string, client api.Client, dryRun bool, model string, contextFilePath string) error {
 	originalContent, handlers, fset, err := readFileAndParse(filePath)
 	if err != nil {
 		return err
 	}
 
-	handlerResults, err := processHandlers(handlers, client, model, fset)
+	contextHandler := &ContextFileHandler{}
+	routes, err := contextHandler.ExtractRoutes(contextFilePath)
+	if err != nil {
+		return err
+	}
+
+	handlerResults, err := processHandlers(handlers, client, model, fset, routes)
 	if err != nil {
 		return err
 	}
@@ -53,7 +60,7 @@ func readFileAndParse(filePath string) ([]byte, []*ast.FuncDecl, *token.FileSet,
 	return originalContent, handlers, fset, nil
 }
 
-func processHandlers(handlers []*ast.FuncDecl, client api.Client, model string, fset *token.FileSet) ([]HandlerResult, error) {
+func processHandlers(handlers []*ast.FuncDecl, client api.Client, model string, fset *token.FileSet, routes []model.Route) ([]HandlerResult, error) {
 	var handlerWg sync.WaitGroup
 	handlerResults := make(chan HandlerResult, len(handlers))
 
@@ -61,7 +68,7 @@ func processHandlers(handlers []*ast.FuncDecl, client api.Client, model string, 
 		handlerWg.Add(1)
 		go func(handler *ast.FuncDecl) {
 			defer handlerWg.Done()
-			comment, err := processHandler(handler, client, model)
+			comment, err := processHandler(handler, client, model, routes)
 			startPos := fset.Position(handler.Pos()).Offset
 			endPos := fset.Position(handler.End()).Offset
 			handlerResults <- HandlerResult{Handler: handler, Comment: comment, Error: err, StartPos: startPos, EndPos: endPos}

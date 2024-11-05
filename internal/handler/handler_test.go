@@ -44,7 +44,7 @@ func Helloworld(g *gin.Context) {
 
 	mockClient := &test.MockOpenAIClient{}
 
-	err = ProcessFiles(files, mockClient, false, "test-model")
+	err = ProcessFiles(files, mockClient, false, "test-model", "")
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -58,8 +58,7 @@ func Helloworld(g *gin.Context) {
 	expectedComment := `// Helloworld godoc
 // @Summary Helloworld summary
 // @Description do Helloworld
-// @Success 200 {string} string "OK"
-// @Router /example/Helloworld [get]`
+// @Success 200 {string} string "OK"`
 
 	if !strings.Contains(string(modifiedContent), expectedComment) {
 		t.Fatalf("Expected comment not found in modified file:\n%s", string(modifiedContent))

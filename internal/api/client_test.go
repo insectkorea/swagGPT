@@ -9,7 +9,7 @@ import (
 func TestGenerateSwaggerComment(t *testing.T) {
 	client := &test.MockOpenAIClient{}
 
-	comment, err := client.GenerateSwaggerComment("Helloworld", "func %s(g *gin.Context) {", "test")
+	comment, err := client.GenerateSwaggerComment("Helloworld", "func %s(g *gin.Context) {", "test", "/api/v1/organizations/:organization_id/bundles [get]")
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
